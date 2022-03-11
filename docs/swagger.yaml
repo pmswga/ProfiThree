@@ -1,0 +1,181 @@
+basePath: /
+definitions:
+  main.RequestPrize:
+    properties:
+      description:
+        type: string
+    required:
+    - description
+    type: object
+  main.RequestPromo:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - name
+    type: object
+  participant.Participant:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  prize.Prize:
+    type: object
+  prize.ResponsePrize:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+    type: object
+  promo.ResponsePromo:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      participants:
+        items:
+          $ref: '#/definitions/participant.Participant'
+        type: array
+      prizes:
+        items:
+          $ref: '#/definitions/prize.Prize'
+        type: array
+    type: object
+info:
+  contact: {}
+  title: Products_Store
+  version: "1.0"
+paths:
+  /prize:
+    get:
+      parameters:
+      - description: Query string
+        in: query
+        name: query
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/prize.ResponsePrize'
+            type: array
+        "400":
+          description: There is no matches with query
+          schema:
+            type: string
+      summary: Retrieves all prizes
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: json body
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/main.RequestPrize'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/prize.ResponsePrize'
+        "400":
+          description: Field validation failed on the 'required' tag
+          schema:
+            type: string
+      summary: Create new prize
+  /promo:
+    get:
+      parameters:
+      - description: Query string
+        in: query
+        name: query
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/promo.ResponsePromo'
+            type: array
+        "400":
+          description: There is no matches with query
+          schema:
+            type: string
+      summary: Retrieves all promo
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: json body
+        in: body
+        name: json_body
+        required: true
+        schema:
+          $ref: '#/definitions/main.RequestPromo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/promo.ResponsePromo'
+        "400":
+          description: There is no category with id
+          schema:
+            type: string
+      summary: Create new promo
+  /promo/{id}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Product with id was deleted
+          schema:
+            type: string
+        "400":
+          description: There is no product with id
+          schema:
+            type: string
+      summary: Delete promo
+    get:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/promo.ResponsePromo'
+        "400":
+          description: There is no product with id
+          schema:
+            type: string
+      summary: Retrieves promo by id
+swagger: "2.0"
